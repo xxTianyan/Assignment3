@@ -4,7 +4,7 @@
 ### Conda environment, install, and testing
 
 ```bash
-conda create --name finite-element-analysis-env python=3.9.13
+conda create --name finite-element-analysis-env python=3.12.9
 ```
 
 ```bash
