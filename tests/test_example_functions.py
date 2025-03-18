@@ -1,5 +1,5 @@
 import numpy as np
-from setupexample import example_functions as ef
+from finiteelementanalysis import example_functions as ef
 
 
 def test_add_x_y():
