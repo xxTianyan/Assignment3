@@ -5,7 +5,7 @@
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/sandialabs/sibl#license)
 
 [![codecov](https://codecov.io/gh/Lejeune-Lab-Graduate-Course-Materials/inite-element-analysis/graph/badge.svg?token=p5DMvJ6byO)](https://codecov.io/gh/Lejeune-Lab-Graduate-Course-Materials/inite-element-analysis)
-[![tests](https://github.com/Lejeune-Lab-Graduate-Course-Materials/inite-element-analysis/actions/workflows/tests.yml/badge.svg)](https://github.com/Lejeune-Lab-Graduate-Course-Materials/inite-element-analysis/actions)
+[![tests](https://github.com/Lejeune-Lab-Graduate-Course-Materials/inite-element-analysis/actions/workflows/tests.yml/badge.svg)](https://github.com/Lejeune-Lab-Graduate-Course-Materials/finite-element-analysis/actions)
 
 ### Conda environment, install, and testing
 
