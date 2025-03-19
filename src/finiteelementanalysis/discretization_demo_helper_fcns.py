@@ -51,8 +51,8 @@ def interpolate_field_natural_coords_single_element(ele_type, node_values, xi_va
         raise ValueError(f"Unsupported element type: {ele_type}")
 
     shape_function = shape_function_map[ele_type]
-    interpolated_vals = np.zeros((len(xi_vals)))
 
+    interpolated_vals = np.zeros((len(xi_vals)))
     for i in range(0, len(xi_vals)):
         xi = xi_vals[i]
         eta = eta_vals[i]
@@ -469,7 +469,6 @@ def visualize_gauss_pts(fname, ele_type, num_pts):
     ax.set_aspect('equal')
     
     plt.savefig(fname, dpi=300)
-    plt.close(fig)
     return
 
 

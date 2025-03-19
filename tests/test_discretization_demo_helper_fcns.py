@@ -416,31 +416,6 @@ def test_interpolate_gradient_natural_coords_single_element_vector_quadratic():
         di_demo.interpolate_gradient_natural_coords_single_element("invalid_type", np.array([[1.0, 1.0]]), np.array([0.0]), np.array([0.0]))
 
 
-# def linear_scalar_field_2D(x, y):
-#     """Defines a linear scalar field for interpolation testing."""
-#     return 2*x + 3*y + 5  # f(x, y)
-
-
-# def linear_scalar_field_2D_deriv(x, y):
-#     """Computes the analytical gradient of the linear scalar field in physical coordinates."""
-#     return np.array([2, 3])  # df/dx, df/dy
-
-
-# def test_transform_gradient_to_physical():
-#     # provide:
-#     # nodal coordinates for each element type as natural coordinates
-#     # nodal coordinates for each element type as physical coordinates
-#     # key test points for each element in natural coordinates, including all nodes, the element center, and an arbitrary point within the element
-    
-#     # map the test points from natural to physical coordinates
-#     # using interpolate_field_natural_coords_single_element()
-#     # evaluate the derivative analytically at each of these points
-
-#     # then use interpolate_gradient_natural_coords_single_element()
-#     # and transform_gradient_to_physical() to evaluate the derivative numerically at these poitns
-#     # then check to see if the results are correct compared to the analytical solution in the physical coordinates
-
-
 def linear_scalar_field_2D(x, y):
     """Defines a linear scalar field for interpolation testing."""
     return 2*x + 3*y + 5  # f(x, y)
