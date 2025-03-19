@@ -24,6 +24,6 @@ pip install -e .
 ```
 
 ```bash
-pytest -v --cov=setupexample  --cov-report term-missing
+pytest -v --cov=finiteelementanalysis --cov-report term-missing
 ```
 
