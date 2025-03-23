@@ -26,7 +26,12 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install dependencies
+      # 🛠️ Install system dependencies (only for Ubuntu)
+      - name: Install libGLU (Linux only)
+        if: matrix.platform == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install -y libglu1-mesa
+
+      - name: Install project dependencies
         run: pip install -e .
 
       - name: Install test dependencies
@@ -40,4 +45,4 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.xml
-          fail_ci_if_error: true  # Ensure failure if upload fails
+          fail_ci_if_error: true
