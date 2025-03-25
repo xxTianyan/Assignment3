@@ -481,3 +481,54 @@ def test_plot_element_quality_histograms():
     # Validate the file was created and is not empty
     assert plot_file.exists(), f"Plot file {plot_file} was not created."
     assert os.stat(plot_file).st_size > 0, f"Plot file {plot_file} is empty."
+
+
+def check_jacobian_positive(ele_type, outline, mesh_name):
+    mesh_size = 0.1
+    coords, connect = pre.mesh_outline(outline, ele_type, mesh_name, mesh_size)
+    _, jac_dets = pre_demo.compute_condition_and_jacobian(ele_type, coords, connect)
+    assert np.min(jac_dets) > 0, f"Negative Jacobian found in mesh: {mesh_name}"
+
+
+@pytest.mark.parametrize("ele_type", ["D2_nn3_tri", "D2_nn6_tri"])
+@pytest.mark.parametrize("outline_name,outline", [
+    # Squares (axis-aligned)
+    ("cw_square", [(1, 1), (1, -1), (-1, -1), (-1, 1), (1, 1)]),
+    ("ccw_square", [(1, 1), (-1, 1), (-1, -1), (1, -1), (1, 1)]),
+
+    # Rectangles (wider)
+    ("cw_rectangle", [(2, 1), (2, -1), (-2, -1), (-2, 1), (2, 1)]),
+    ("ccw_rectangle", [(2, 1), (-2, 1), (-2, -1), (2, -1), (2, 1)]),
+
+    # Rectangles (taller)
+    ("cw_tall", [(1, 2), (1, -2), (-1, -2), (-1, 2), (1, 2)]),
+    ("ccw_tall", [(1, 2), (-1, 2), (-1, -2), (1, -2), (1, 2)]),
+
+    # Non-axis aligned quadrilateral (parallelogram-like)
+    ("cw_skewed", [(2, 2), (3, 0), (1, -2), (0, 0), (2, 2)]),
+    ("ccw_skewed", [(2, 2), (0, 0), (1, -2), (3, 0), (2, 2)]),
+
+    # Tilted diamond
+    ("cw_diamond", [(0, 2), (2, 0), (0, -2), (-2, 0), (0, 2)]),
+    ("ccw_diamond", [(0, 2), (-2, 0), (0, -2), (2, 0), (0, 2)]),
+
+    # Trapezoid
+    ("cw_trapezoid", [(1, 1), (2, -1), (-2, -1), (-1, 1), (1, 1)]),
+    ("ccw_trapezoid", [(1, 1), (-1, 1), (-2, -1), (2, -1), (1, 1)]),
+])
+def test_jacobian_from_pygmsh(ele_type, outline_name, outline):
+    """
+    Tests that elements generated from clockwise and counterclockwise outlines
+    produce strictly positive Jacobian determinants. This protects against issues 
+    from node ordering or platform-dependent pygmsh behavior.
+    """
+    mesh_name = f"{outline_name}_{ele_type}"
+    mesh_size = 0.1
+    coords, connect = pre.mesh_outline(outline, ele_type, mesh_name, mesh_size)
+    _, jac_dets = pre_demo.compute_condition_and_jacobian(ele_type, coords, connect)
+
+    min_jac = np.min(jac_dets)
+    assert min_jac > 0, (
+        f"Negative Jacobian in mesh '{mesh_name}' (min={min_jac:.3e}). "
+        f"This may indicate node ordering inconsistency or a bug in orientation handling."
+    )

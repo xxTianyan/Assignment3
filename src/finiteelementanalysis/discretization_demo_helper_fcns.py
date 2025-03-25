@@ -1,6 +1,8 @@
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 from finiteelementanalysis import discretization as di
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 def interpolate_field_natural_coords_single_element(ele_type, node_values, xi_vals, eta_vals):
