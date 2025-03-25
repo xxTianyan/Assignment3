@@ -84,7 +84,7 @@ def element_residual(ele_type, coords, materialprops, displacement):
             for i in range(ndof):
                 row = ndof * a + i
                 for j in range(ncoord):
-                    rel[row] += stress[i, j] * dNdxs[a, j] * w_array[intpt] * det_dxdxi
+                    rel[row] += stress[i, j] * dNdxs[a, j] * w_array[intpt][0] * det_dxdxi
 
     return rel
 
