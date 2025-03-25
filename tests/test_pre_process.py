@@ -239,7 +239,7 @@ def test_mesh_outline():
     assert np.allclose(connect_nn3, connect_nn3_open, atol=1e-10), "Open outline connect don't match closed outline."
     
     # # Ensure the function runs without crashing for a more complex shape
-    complex_outline = pre.get_bulldog_outline()
+    complex_outline = pre.get_terrier_outline()
     mesh_size = 1.0
     coords, connect = pre.mesh_outline(complex_outline, "D2_nn3_tri", mesh_name, mesh_size)
     assert coords.shape[0] > 0, "Mesh generation failed for complex shape."
@@ -527,10 +527,10 @@ def test_identify_rect_boundaries_D2_nn6_tri():
 
     # Node coordinates (n_nodes=9 total)
     coords = np.array([
-        [0.0, 0.0],  # node0, corner
-        [1.0, 0.0],  # node1, corner
-        [1.0, 1.0],  # node2, corner
-        [0.0, 1.0],  # node3, corner
+        [0.0, 0.0],  # node0, corner, lower left
+        [1.0, 0.0],  # node1, corner. lower right
+        [1.0, 1.0],  # node2, corner, upper right
+        [0.0, 1.0],  # node3, corner, upper left
         [0.5, 0.0],  # node4, mid-edge bottom (between node0->node1)
         [1.0, 0.5],  # node5, mid-edge right  (between node1->node2)
         [0.5, 1.0],  # node6, mid-edge top    (between node2->node3)

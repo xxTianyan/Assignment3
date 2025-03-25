@@ -110,56 +110,75 @@ def generate_tri3_mesh(xl, yl, xh, yh, nx, ny):
 
 def generate_tri6_mesh(xl, yl, xh, yh, nx, ny):
     """
-    Generate a tri6 (6-node) mesh by subdividing each rectangular cell into
-    two triangles, adding mid-edge nodes in the correct shape function order.
+    Generate a Tri6 (6-node) mesh by subdividing each rectangular cell into
+    two triangles, with node ordering consistent with the standard Tri6
+    shape functions N1..N6.
     """
     dx = (xh - xl) / float(nx)
     dy = (yh - yl) / float(ny)
 
-    # Refined grid has (2*nx+1) points in x, (2*ny+1) points in y
+    # Refined grid has (2*nx + 1) points in x, (2*ny + 1) points in y
     npx = 2 * nx + 1
     npy = 2 * ny + 1
 
     # Build refined coordinates
-    coords_list = [(xl + 0.5 * ix * dx, yl + 0.5 * iy * dy)
-                   for iy in range(npy) for ix in range(npx)]
+    coords_list = []
+    for iy in range(npy):
+        for ix in range(npx):
+            x = xl + 0.5 * ix * dx
+            y = yl + 0.5 * iy * dy
+            coords_list.append((x, y))
     coords = np.array(coords_list, dtype=float)
 
     def node_id(ix, iy):
         return iy * npx + ix
 
     connectivity_list = []
-    
+
     for celly in range(ny):
         for cellx in range(nx):
-            ix0, iy0 = 2 * cellx, 2 * celly
+            ix0 = 2 * cellx
+            iy0 = 2 * celly
 
-            # -- First triangle ----------------------------------------
-            # Corner nodes (from shape function order)
-            N3 = node_id(ix0,   iy0)     # Bottom-left
-            N1 = node_id(ix0+2, iy0)     # Bottom-right
-            N2 = node_id(ix0,   iy0+2)   # Top-left
-            
-            # Mid-edge nodes
-            N4 = node_id(ix0+1, iy0+1)   # midpoint (N1->N2) diagonal
-            N5 = node_id(ix0,   iy0+1)   # midpoint (N2->N3) left vertical
-            N6 = node_id(ix0+1, iy0)     # midpoint (N3->N1) bottom horizontal
+            # --- First triangle in the cell ---
+            #
+            #  Local reference:  N1(1,0), N2(0,1), N3(0,0)
+            #
+            #  In (x,y) space for the first half:
+            #    * N1 = bottom-right corner
+            #    * N2 = top-left corner
+            #    * N3 = bottom-left corner
+            #    * N4 = diagonal midpoint (N1->N2)
+            #    * N5 = left-mid (N2->N3)
+            #    * N6 = bottom-mid (N3->N1)
+            #
+            N1 = node_id(ix0+2, iy0  )  # bottom-right
+            N2 = node_id(ix0,   iy0+2)  # top-left
+            N3 = node_id(ix0,   iy0  )  # bottom-left
+            N4 = node_id(ix0+1, iy0+1)  # midpoint diag (bottom-right -> top-left)
+            N5 = node_id(ix0,   iy0+1)  # midpoint left vertical
+            N6 = node_id(ix0+1, iy0  )  # midpoint bottom horizontal
 
             connectivity_list.append([N1, N2, N3, N4, N5, N6])
 
-            # -- Second triangle ---------------------------------------
-            # Corner nodes
-            N3_2 = node_id(ix0+2, iy0+2)   # Top-right
-            N1_2 = node_id(ix0,   iy0+2)   # Top-left  (same as N2 above)
-            N2_2 = node_id(ix0+2, iy0)     # Bottom-right (same as N1 above)
-
-            # Mid-edge nodes for second triangle
-            # (N1_2 -> N2_2) = (top-left -> bottom-right) => diagonal
-            # (N2_2 -> N3_2) = (bottom-right -> top-right) => right vertical
-            # (N3_2 -> N1_2) = (top-right -> top-left) => top horizontal
-            N4_2 = node_id(ix0+1, iy0+1)   # mid-edge (N1_2->N2_2) diagonal
-            N5_2 = node_id(ix0+2, iy0+1)   # mid-edge (N2_2->N3_2) right vertical
-            N6_2 = node_id(ix0+1, iy0+2)   # mid-edge (N3_2->N1_2) top horizontal
+            # --- Second triangle in the cell ---
+            #
+            #  Local reference:  N1(1,0), N2(0,1), N3(0,0)
+            #
+            #  In (x,y) space for the second half:
+            #    * N1 = top-right corner
+            #    * N2 = top-left corner
+            #    * N3 = bottom-right corner
+            #    * N4 = top horizontal mid (N1->N2)
+            #    * N5 = diagonal mid (N2->N3)
+            #    * N6 = right vertical mid (N3->N1)
+            #
+            N1_2 = node_id(ix0+2, iy0+2) # top-right
+            N2_2 = node_id(ix0,   iy0+2) # top-left
+            N3_2 = node_id(ix0+2, iy0  ) # bottom-right
+            N4_2 = node_id(ix0+1, iy0+2) # top horizontal midpoint
+            N5_2 = node_id(ix0+1, iy0+1) # diagonal midpoint
+            N6_2 = node_id(ix0+2, iy0+1) # right vertical midpoint
 
             connectivity_list.append([N1_2, N2_2, N3_2, N4_2, N5_2, N6_2])
 
@@ -390,22 +409,27 @@ def mesh_outline(
             gmsh_node_id = these_node_tags[e * n_nodes_per_elem + k]
             connectivity[e, k] = id2local[gmsh_node_id]
 
-    # reverse ordering for D2_nn3_tri elements -- gmsh automatically return clockwise nodes
-    if element_type == "D2_nn3_tri":
-        connectivity[:, [0, 1]] = connectivity[:, [1, 0]]  # reverse 0 and 1 for CCW
-    elif element_type == "D2_nn6_tri":
-        # Reverse corner nodes: [0, 1, 2] → [0, 2, 1]
-        connectivity[:, [1, 2]] = connectivity[:, [2, 1]]
-        # Reverse mid-edge nodes: [3, 4, 5] → [5, 4, 3]
-        connectivity[:, [3, 5]] = connectivity[:, [5, 3]]
+    # Correct orientation element-by-element using signed area test
+    for e in range(n_elems):
+        elem_nodes = connectivity[e, :3]  # only first 3 are corners
+        x1, y1 = coords[elem_nodes[0]]
+        x2, y2 = coords[elem_nodes[1]]
+        x3, y3 = coords[elem_nodes[2]]
+        signed_area = 0.5 * ((x2 - x1)*(y3 - y1) - (x3 - x1)*(y2 - y1))
+        if signed_area < 0:  # CW ordering, flip
+            # flip corner node order
+            connectivity[e, [1, 2]] = connectivity[e, [2, 1]]
+            # flip mid-edge node order for quadratic elements
+            if element_type == "D2_nn6_tri":
+                connectivity[e, [3, 5]] = connectivity[e, [5, 3]]
 
     gmsh.finalize()
     return coords, connectivity
 
 
-def get_bulldog_outline():
+def get_terrier_outline():
     """
-    Return a list of (x, y) coordinate pairs for a bulldog head outline,
+    Return a list of (x, y) coordinate pairs for a terrier head outline,
     as extracted from Inkscape.
 
     The coordinates below were copied directly from an Inkscape path export.
@@ -414,7 +438,7 @@ def get_bulldog_outline():
     Returns
     -------
     outline_points : list of (float, float)
-        The bulldog outline, stored as a list of XY pairs.
+        The terrier outline, stored as a list of XY pairs.
     """
     # Raw coordinate string (from Inkscape)
     raw_coords = """
@@ -466,7 +490,7 @@ def identify_rect_boundaries(
     x_upper: float,
     y_lower: float,
     y_upper: float,
-    tol: float = 1e-12
+    tol: float = 1e-10
 ):
     """
     Identify boundary nodes, elements, and faces for a rectangular 2D domain

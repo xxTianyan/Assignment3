@@ -307,8 +307,8 @@ def test_complex_geom(ele_type, num_gauss_pts):
     Ensures Gauss points are correctly computed, interpolation is accurate, and plots are saved.
     """
     # Define mesh settings
-    mesh_name = f"bulldog_mesh_{ele_type}_gp{num_gauss_pts}"
-    complex_outline = pre.get_bulldog_outline()  # Get complex geometry
+    mesh_name = f"terrier_mesh_{ele_type}_gp{num_gauss_pts}"
+    complex_outline = pre.get_terrier_outline()  # Get complex geometry
     mesh_size = 25.0  # Mesh resolution
 
     # Generate mesh
@@ -449,8 +449,8 @@ def test_plot_element_quality_histograms():
     """
     # Use a 4-node quadrilateral mesh
     ele_type = "D2_nn3_tri"
-    mesh_name = f"bulldog_mesh_{ele_type}"
-    complex_outline = pre.get_bulldog_outline()  # Get complex geometry
+    mesh_name = f"terrier_mesh_{ele_type}"
+    complex_outline = pre.get_terrier_outline()  # Get complex geometry
     mesh_size = 10.0  # Mesh resolution
 
     # Generate mesh
