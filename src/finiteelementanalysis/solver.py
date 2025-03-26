@@ -126,7 +126,7 @@ def hyperelastic_solver(
                 R[bc_dof] = loadfactor * fixed_nodes[2, n] - displacement[bc_dof]
 
             d_displacement = np.linalg.solve(K, R)
-            displacement += d_displacement
+            displacement += d_displacement 
 
             wnorm = np.dot(displacement, displacement)
             err1 = np.dot(d_displacement, d_displacement)

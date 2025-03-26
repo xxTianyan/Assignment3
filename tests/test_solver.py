@@ -25,9 +25,9 @@ def test_hyperelastic_solver_basic(ele_type):
     boundary_nodes, boundary_edges = pre.identify_rect_boundaries(
         coords, connect, ele_type, x_lower, x_upper, y_lower, y_upper)
     fixed_nodes = pre.assign_fixed_nodes_rect(boundary_nodes, "left", 0, 0)
-    dload_info = pre.assign_uniform_load_rect(boundary_edges, "right", 2.0, 0.0)
+    dload_info = pre.assign_uniform_load_rect(boundary_edges, "right", 0.1, 0.0)
 
-    material_props = np.array([1.0, 10.0])  # e.g., Neo-Hookean: [mu, K]
+    material_props = np.array([1.0, 10.0])  # Neo-Hookean: [mu, K]
 
     # Run solver
     displacements_all, nr_print_info_all = solver.hyperelastic_solver(

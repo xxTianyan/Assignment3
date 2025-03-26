@@ -6,6 +6,12 @@ import pytest
 
 #TODO: remove reference to 3D in docstrings in main function
 
+
+def scalar_cross_2d(v1, v2):
+    # Computes the scalar (z-component) of the 2D cross product
+    return v1[0] * v2[1] - v1[1] * v2[0]
+
+
 # Mapping of element types to shape functions
 SHAPE_FCN = {
     "D2_nn3_tri": di.D2_nn3_tri,
@@ -532,7 +538,7 @@ def test_compute_jacobian(ele_type):
                 a = element_coords[:, 0]
                 b = element_coords[:, 1]
                 c = element_coords[:, 2]
-                expected_area = 0.5 * np.abs(np.cross(b - a, c - a))
+                expected_area = 0.5 * np.abs(scalar_cross_2d(b - a, c - a))
                 approx_area = det_dxdxi * 0.5  # where 0.5 is the area of the element in natural coords
             elif "quad" in ele_type:
                 # Quadrilateral (assuming bilinear, but linear shape): split into two triangles
@@ -540,8 +546,8 @@ def test_compute_jacobian(ele_type):
                 b = element_coords[:, 1]
                 c = element_coords[:, 2]
                 d = element_coords[:, 3]
-                area1 = 0.5 * np.abs(np.cross(b - a, d - a))
-                area2 = 0.5 * np.abs(np.cross(c - b, d - b))
+                area1 = 0.5 * np.abs(scalar_cross_2d(b - a, d - a))
+                area2 = 0.5 * np.abs(scalar_cross_2d(c - b, d - b))
                 expected_area = area1 + area2
                 approx_area = det_dxdxi * 4.0  # where 4.0 is the area of the element in natural coords
             assert np.isclose(approx_area, expected_area, rtol=1e-3), \

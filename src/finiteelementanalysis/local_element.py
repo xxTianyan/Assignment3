@@ -235,7 +235,7 @@ def compute_face_load_contribution(num_face_nodes, ndof, traction, N):
     for a in range(num_face_nodes):
         for i in range(ndof):
             row = ndof * a + i
-            r_local[row] = N[a] * traction[i]
+            r_local[row] = N[a][0] * traction[i]
     return r_local
 
 

@@ -72,6 +72,7 @@ def plot_mesh_2D(fname: str, ele_type: str, coords: np.ndarray, connect: np.ndar
 
     plt.savefig(fname, dpi=300, bbox_inches='tight', pad_inches=0.1)
     plt.close(fig)
+    return
 
 
 def make_deformation_gif(displacements_all, coords, connect, ele_type, gif_path, magnification=1.0, interval=500):

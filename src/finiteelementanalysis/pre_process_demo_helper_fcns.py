@@ -73,6 +73,7 @@ def plot_mesh_2D(fname: str, ele_type: str, coords: np.ndarray, connect: np.ndar
 
     # Save with high DPI and clean style
     plt.savefig(fname, dpi=300, bbox_inches='tight', pad_inches=0.1)
+    plt.close()
     return
 
 
@@ -215,7 +216,7 @@ def interpolate_scalar_to_gauss_pts(ele_type: str, num_gauss_pts: int, fcn_to_in
             shape_fcn_eval = shape_fcn(gauss_pts[:, jj])
 
             # Interpolate function at Gauss points
-            fcn_interp_mesh_gauss_pts[kk, jj] = fcn_values_at_nodes.T @ shape_fcn_eval  # Dot product
+            fcn_interp_mesh_gauss_pts[kk, jj] = (fcn_values_at_nodes.T @ shape_fcn_eval).item() # Dot product
 
     return fcn_interp_mesh_gauss_pts
 
@@ -385,6 +386,7 @@ def plot_interpolation_with_error(
     plt.suptitle(f"Gauss Point Interpolation for {ele_type}", fontsize=14, weight='bold')
     plt.tight_layout()
     plt.savefig(fname, dpi=300, bbox_inches='tight', pad_inches=0.1)
+    plt.close()
     return
 
 
@@ -478,6 +480,7 @@ def plot_interpolation_gradient_with_error(
     plt.suptitle(f"Gauss Point Gradient Interpolation for {ele_type}", fontsize=15, weight='bold')
     plt.tight_layout()
     plt.savefig(fname, dpi=300, bbox_inches='tight', pad_inches=0.1)
+    plt.close()
     return
 
 
@@ -749,5 +752,6 @@ def plot_element_quality_histograms(
 
     plt.tight_layout(rect=[0, 0, 1, 0.95])  # Leave space for suptitle
     plt.savefig(fname, bbox_inches='tight', pad_inches=0.1)
+    plt.close()
     return
 

@@ -59,7 +59,7 @@ def interpolate_field_natural_coords_single_element(ele_type, node_values, xi_va
         xi = xi_vals[i]
         eta = eta_vals[i]
         N = shape_function(np.asarray([xi, eta]))
-        interpolated_vals[i] = np.dot(N.T, node_values)
+        interpolated_vals[i] = np.dot(N.T, node_values).item()
 
     return interpolated_vals.reshape((-1, 1))
 
@@ -128,7 +128,7 @@ def plot_interpolate_field_natural_coords_single_element(fname: str, ele_type: s
     plt.ylabel("η (Natural Coordinate)")
     plt.title(f"Interpolated Field for {ele_type}")
     plt.savefig(fname, dpi=300)
-
+    plt.close()
     return
 
 
@@ -208,7 +208,7 @@ def visualize_isoparametric_mapping_single_element(fname: str, ele_type, node_co
 
     plt.tight_layout()
     plt.savefig(fname, dpi=300)
-
+    plt.close()
     return
 
 
@@ -471,6 +471,7 @@ def visualize_gauss_pts(fname, ele_type, num_pts):
     ax.set_aspect('equal')
     
     plt.savefig(fname, dpi=300)
+    plt.close()
     return
 
 
