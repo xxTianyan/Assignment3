@@ -1,10 +1,16 @@
+import warnings
+warnings.simplefilter("always")
 from finiteelementanalysis import pre_process as pre
+from finiteelementanalysis import pre_process_demo_helper_fcns as pre_demo
 from finiteelementanalysis.solver import hyperelastic_solver
 from finiteelementanalysis import visualize as viz
 import matplotlib.pyplot as plt
 import numpy as np
 from pathlib import Path
 
+
+# for saving files later
+tutorials_dir = Path(__file__).parent
 
 # Solve a homogeneous uniaxial extension problem and compare the computed displacement
 # field to the analytical solution u_x = (lambda - 1)*x and u_y = 0.
@@ -18,14 +24,14 @@ from pathlib import Path
 #     u_x(x) = (lambda - 1)*x,  u_y(x) = 0.
 
 # FEA problem info
-ele_type = "D2_nn3_tri"
+ele_type = "D2_nn4_quad"
 ndof = 2
 
 # Define domain
 L = 10.0      # length in x-direction
 H = 5.0       # height in y-direction
-nx = 40       # number of elements in x
-ny = 20       # number of elements in y, keep this an even number if you want the analytical solution to be able to compute midline deformation
+nx = 4       # number of elements in x
+ny = 2       # number of elements in y, keep this an even number if you want the analytical solution to be able to compute midline deformation
 
 # Prescribed stretch (e.g., lambda = 1.05 gives a 5% extension)
 lambda_target = 1.05
@@ -33,12 +39,17 @@ lambda_target = 1.05
 # Generate mesh
 coords, connect = pre.generate_rect_mesh_2d(ele_type, 0.0, 0.0, L, H, nx, ny)
 
+
+mesh_img_fname = tutorials_dir / "full_code_example_1_mesh.png"
+pre_demo.plot_mesh_2D(str(mesh_img_fname), ele_type, coords, connect)
+
+
 # Identify boundaries
 boundary_nodes, boundary_edges = pre.identify_rect_boundaries(coords, connect, ele_type, 0, L, 0, H)
 
 # Apply boundary conditions:
 # 1. Fix left boundary: both u_x and u_y = 0.
-fixed_left = pre.assign_fixed_nodes_rect(boundary_nodes, "left", 0, 0.0, 0.0)
+fixed_left = pre.assign_fixed_nodes_rect(boundary_nodes, "left", 0.0, 0.0)
 # 2. Prescribe right boundary: u_x = (lambda_target - 1)*L at x = L.
 fixed_right = pre.assign_fixed_nodes_rect(boundary_nodes, "right", (lambda_target - 1) * L, 0)
 # 3. To force a homogeneous state, prescribe u_y = 0 on the top and bottom boundaries.
@@ -97,7 +108,6 @@ plt.grid(True)
 plt.tight_layout()
 
 # Save the plot image to the tutorials directory.
-tutorials_dir = Path(__file__).parent
 img_fname = tutorials_dir / "uniaxial_extension_error.png"
 plt.savefig(str(img_fname))
 
