@@ -87,7 +87,7 @@ def test_element_residual_stretch_nonzero_all_elements(ele_type):
     # Material properties (e.g., Neo-Hookean)
     mu = 10.0
     kappa = 100.0
-    material_props = (mu, kappa)
+    material_props = np.array([mu, kappa])
 
     # Compute element residual
     rel = le.element_residual(ele_type, element_coords, material_props, displacement)
@@ -120,7 +120,7 @@ def test_element_residual_zero_displacement(ele_type):
     # Material parameters (e.g., Neo-Hookean)
     mu = 10.0
     kappa = 100.0
-    material_props = (mu, kappa)
+    material_props = np.array([mu, kappa])
 
     # Compute residual
     rel = le.element_residual(ele_type, element_coords, material_props, displacement)
@@ -337,7 +337,7 @@ def test_stiffness_matrix_is_positive_semi_definite(ele_type):
     coords, connect = pre.generate_rect_mesh_2d(ele_type, 0.0, 0.0, 1.0, 1.0, 1, 1)
     element_coords = coords[connect[0]].T
     displacement = np.zeros((ndof, nelnodes))
-    material_props = (10.0, 100.0)
+    material_props = np.array([10.0, 100.0])
 
     kel = le.element_stiffness(ele_type, material_props, element_coords, displacement)
 
@@ -353,7 +353,7 @@ def test_rigid_body_motion_produces_no_energy(ele_type):
 
     # Rigid translation
     displacement = np.ones((ndof, nelnodes)) * 0.5
-    material_props = (10.0, 100.0)
+    material_props = np.array([10.0, 100.0])
     kel = le.element_stiffness(ele_type, material_props, element_coords, displacement)
 
     u_flat = displacement.T.flatten()
@@ -372,7 +372,7 @@ def test_virtual_work_energy_consistency(ele_type):
     def u(x, y): return np.array([0.1 * x, 0.2 * y])
     displacement = np.array([u(x, y) for x, y in node_coords]).T
 
-    material_props = (10.0, 100.0)
+    material_props = np.array([10.0, 100.0])
     kel = le.element_stiffness(ele_type, material_props, element_coords, displacement)
 
     # Virtual work: W_int = 0.5 * u.T @ K @ u
@@ -387,7 +387,7 @@ def test_stiffness_no_geometric_term(ele_type):
     coords, connect = pre.generate_rect_mesh_2d(ele_type, 0.0, 0.0, 1.0, 1.0, 1, 1)
     element_coords = coords[connect[0]].T
     displacement = np.zeros((ndof, nelnodes))
-    material_props = (10.0, 100.0)
+    material_props = np.array([10.0, 100.0])
 
     kel = le.element_stiffness(ele_type, material_props, element_coords, displacement)
 
@@ -400,7 +400,7 @@ def test_stiffness_increases_with_stretch(ele_type):
     ncoord, ndof, nelnodes = di.element_info(ele_type)
     coords, connect = pre.generate_rect_mesh_2d(ele_type, 0.0, 0.0, 1.0, 1.0, 1, 1)
     element_coords = coords[connect[0]].T
-    material_props = (10.0, 100.0)
+    material_props = np.array([10.0, 100.0])
 
     zero_disp = np.zeros((ndof, nelnodes))
     kel_0 = le.element_stiffness(ele_type, material_props, element_coords, zero_disp)
@@ -442,7 +442,7 @@ def test_element_stiffness_matrix_symmetry(ele_type):
     # 4. Material parameters
     mu = 10.0
     kappa = 100.0
-    material_props = (mu, kappa)
+    material_props = np.array([mu, kappa])
 
     # 5. Compute element stiffness
     kel = le.element_stiffness(ele_type, material_props, coords_element, displacement)
@@ -476,7 +476,7 @@ def test_element_stiffness_increase_with_deformation(ele_type):
     # 3. Material properties
     mu = 10.0
     kappa = 100.0
-    material_props = (mu, kappa)
+    material_props = np.array([mu, kappa])
 
     # 4. Zero displacement → no geometric stiffness
     displacement_zero = np.zeros((ndof, nelnodes))
@@ -853,7 +853,7 @@ def test_material_stiffness_identity():
     """
     mu1 = 10.0
     K1 = 100.0
-    materialprops = [mu1, K1]
+    materialprops = np.array([mu1, K1])
     B = np.eye(2)
     J = 1.0
     C = le.material_stiffness_2d(B, J, materialprops)
@@ -884,7 +884,7 @@ def test_material_stiffness_symmetry():
     """
     mu1 = 10.0
     K1 = 100.0
-    materialprops = [mu1, K1]
+    materialprops = np.array([mu1, K1])
     B = np.eye(2)
     J = 1.0
     C = le.material_stiffness_2d(B, J, materialprops)
@@ -913,7 +913,7 @@ def test_material_stiffness_volumetric_scaling():
     """
     mu1 = 10.0
     K1 = 100.0
-    materialprops = [mu1, K1]
+    materialprops = np.array([mu1, K1])
     B = np.eye(2)
     # Test for a J different from 1.
     J = 8.0  # 8^(2/3) = 4
@@ -941,7 +941,7 @@ def test_material_stiffness_large_J_bulk_response():
     B = np.eye(2)
     J = 10.0
     mu1, K1 = 1.0, 100.0  # Make bulk modulus much larger
-    C = le.material_stiffness_2d(B, J, [mu1, K1])
+    C = le.material_stiffness_2d(B, J, np.array([mu1, K1]))
 
     # Diagonal volumetric terms should be much larger than deviatoric terms
     volumetric = C[0, 0, 0, 0]
@@ -956,7 +956,7 @@ def test_kirchhoff_stress_undeformed_state():
     """
     mu1 = 10.0
     K1 = 100.0
-    materialprops = [mu1, K1]
+    materialprops = np.array([mu1, K1])
     B = np.eye(2)
     J = 1.0
     stress = le.kirchhoff_stress(B, J, materialprops)
@@ -971,7 +971,7 @@ def test_kirchhoff_stress_symmetry():
     """
     mu1 = 10.0
     K1 = 100.0
-    materialprops = [mu1, K1]
+    materialprops = np.array([mu1, K1])
     # Choose a symmetric B that is not identity.
     B = np.array([[2.0, 0.5],
                   [0.5, 3.0]])
@@ -997,7 +997,7 @@ def test_kirchhoff_stress_known_deformation():
     """
     mu1 = 10.0
     K1 = 100.0
-    materialprops = [mu1, K1]
+    materialprops = np.array([mu1, K1])
     B = np.array([[4.0, 0.0],
                   [0.0, 1.0]])
     J = 2.0
@@ -1018,7 +1018,7 @@ def test_kirchhoff_stress_3d_case():
     """
     mu1 = 10.0
     K1 = 100.0
-    materialprops = [mu1, K1]
+    materialprops = np.array([mu1, K1])
     B = np.eye(3)
     J = 1.0
     stress = le.kirchhoff_stress(B, J, materialprops)
@@ -1078,7 +1078,7 @@ def test_compute_stiffness_contributions_symmetry(ele_type):
     # Material properties and consistent stiffness tensor
     mu1 = 10.0
     K1 = 100.0
-    materialprops = [mu1, K1]
+    materialprops = np.array([mu1, K1])
     dsde = le.material_stiffness_2d(B, J_det, materialprops)
 
     # Consistent stress tensor

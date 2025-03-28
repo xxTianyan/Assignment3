@@ -1,6 +1,8 @@
 from finiteelementanalysis import pre_process as pre
 import numpy as np
 import pytest
+import scipy.sparse as sp
+from scipy.sparse.csgraph import reverse_cuthill_mckee
 
 
 def test_generate_tri3_mesh():

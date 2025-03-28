@@ -1,6 +1,7 @@
 import numpy as np
 from finiteelementanalysis import assemble_global as assemble
 from finiteelementanalysis import discretization as di
+import scipy.sparse.linalg as spla
 
 
 def hyperelastic_solver(

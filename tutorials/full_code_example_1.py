@@ -24,7 +24,7 @@ tutorials_dir = Path(__file__).parent
 #     u_x(x) = (lambda - 1)*x,  u_y(x) = 0.
 
 # FEA problem info
-ele_type = "D2_nn4_quad"
+ele_type = "D2_nn6_tri"
 ndof = 2
 
 # Define domain
@@ -112,7 +112,6 @@ img_fname = tutorials_dir / "uniaxial_extension_error.png"
 plt.savefig(str(img_fname))
 
 # Save an animation of the deformation
-tutorials_dir = Path(__file__).parent
 img_name = "full_code_example_1.gif"
 fname = str(tutorials_dir / img_name)
 viz.make_deformation_gif(displacements_all, coords, connect, ele_type, fname)
