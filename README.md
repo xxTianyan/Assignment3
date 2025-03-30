@@ -36,7 +36,8 @@ pip install -e .
 pytest -v --cov=finiteelementanalysis --cov-report term-missing
 ```
 
-# Finite Element Analysis (FEA) Codebase - Full Overview
+# Finite Element Analysis Codebase - Overview
+
 
 This repository implements a modular 2D Finite Element Analysis (FEA) solver from scratch, with capabilities to solve problems like linear elasticity and hyperelasticity. It is designed for flexibility, educational clarity, and extensibility. A complete example, `full_code_example_1.py`, is provided to demonstrate its usage on a hyperelastic uniaxial extension problem.
 ---
