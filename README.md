@@ -39,26 +39,6 @@ pytest -v --cov=finiteelementanalysis --cov-report term-missing
 # Finite Element Analysis (FEA) Codebase - Full Overview
 
 This repository implements a modular 2D Finite Element Analysis (FEA) solver from scratch, with capabilities to solve problems like linear elasticity and hyperelasticity. It is designed for flexibility, educational clarity, and extensibility. A complete example, `full_code_example_1.py`, is provided to demonstrate its usage on a hyperelastic uniaxial extension problem.
-
----
-
-## 📁 Project Structure
-
-```
-.
-├── full_code_example_1.py             # Full tutorial example using the FEA framework
-├── assemble_global.py                 # Assembles the global stiffness matrix and force vector
-├── discretization.py                  # Defines basis functions and quadrature rules
-├── discretization_demo_helper_fcns.py# Helper functions for discretization demos
-├── example_functions.py              # Defines exact solutions, source terms, and test problems
-├── local_element.py                  # Computes element-level stiffness matrices and force vectors
-├── pre_process.py                    # Sets up mesh, geometry, and boundary conditions
-├── pre_process_demo_helper_fcns.py  # Helper functions for pre-processing demos
-├── solver.py                         # Solves the global system and applies boundary conditions
-├── solver_demo_helper_functions.py  # Helper functions for solver demos
-├── visualize.py                      # Visualization of simulation results
-```
-
 ---
 
 ## 🚀 Code Workflow
