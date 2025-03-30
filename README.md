@@ -36,3 +36,101 @@ pip install -e .
 pytest -v --cov=finiteelementanalysis --cov-report term-missing
 ```
 
+# Finite Element Analysis (FEA) Codebase - Full Overview
+
+This repository implements a modular 2D Finite Element Analysis (FEA) solver from scratch, with capabilities to solve problems like linear elasticity and hyperelasticity. It is designed for flexibility, educational clarity, and extensibility. A complete example, `full_code_example_1.py`, is provided to demonstrate its usage on a hyperelastic uniaxial extension problem.
+
+---
+
+## 📁 Project Structure
+
+```
+.
+├── full_code_example_1.py             # Full tutorial example using the FEA framework
+├── assemble_global.py                 # Assembles the global stiffness matrix and force vector
+├── discretization.py                  # Defines basis functions and quadrature rules
+├── discretization_demo_helper_fcns.py# Helper functions for discretization demos
+├── example_functions.py              # Defines exact solutions, source terms, and test problems
+├── local_element.py                  # Computes element-level stiffness matrices and force vectors
+├── pre_process.py                    # Sets up mesh, geometry, and boundary conditions
+├── pre_process_demo_helper_fcns.py  # Helper functions for pre-processing demos
+├── solver.py                         # Solves the global system and applies boundary conditions
+├── solver_demo_helper_functions.py  # Helper functions for solver demos
+├── visualize.py                      # Visualization of simulation results
+```
+
+---
+
+## 🚀 Code Workflow
+
+### 1. Pre-processing (`pre_process.py`)
+- **functionality**: Generates mesh and sets up boundary conditions.
+  - `generate_rect_mesh(...)`: Create structured 2D rectangular meshes.
+  - `get_dirichlet_nodes(...)`: Determine nodes on domain boundaries.
+
+### 2. Discretization (`discretization.py`)
+- **functionality**: Defines basis functions, numerical integration schemes.
+- **Core Components**:
+  - Basis function evaluations.
+  - Gauss quadrature rules.
+
+### 3. Local Element Calculations (`local_element.py`)
+- **functionality**: Computes local element stiffness and force vectors.
+  - Uses shape function gradients.
+  - Handles nonlinear strain energy density functions (for hyperelasticity).
+
+### 4. Global Assembly (`assemble_global.py`)
+- **functionality**: Assembles global sparse matrices from local contributions.
+  - Efficient sparse matrix handling.
+  - Element-to-global DOF mapping.
+
+### 5. Solver (`solver.py`)
+  - Newton-Raphson nonlinear solver for hyperelasticity.
+  - Applies Dirichlet and Neumann boundary conditions.
+
+### 6. Visualization (`visualize.py`)
+  - Plot deformed meshes.
+  - Visualize displacement and stress fields.
+
+### 7. Examples and Validation (`example_functions.py`)
+- Provides reference solutions and load cases.
+- Useful for unit testing and convergence checks.
+
+---
+
+## 📖 Tutorial Example: `full_code_example_1.py`
+
+This file walks through solving a 2D **hyperelastic uniaxial extension** problem using the framework.
+
+### Problem Setup
+- **Domain**: Rectangle with length `L` and height `H`.
+- **Boundary Conditions**:
+  - Left (x=0): Fixed (u_x = u_y = 0)
+  - Right (x=L): u_x = (lambda - 1)*L, u_y = 0
+  - Top/Bottom: u_y = 0 to enforce homogeneous deformation.
+- **Analytical Displacement Field**:
+  - u_x(x) = (lambda - 1) * x
+  - u_y(x) = 0
+
+### Code Flow
+1. **Import modules** from the FEA framework.
+2. **Generate mesh** with `generate_rect_mesh`.
+3. **Define material model** for hyperelasticity.
+4. **Set boundary conditions**.
+5. **Call `hyperelastic_solver(...)`** to compute displacements.
+6. **Use `visualize.plot_deformed_mesh(...)`** to visualize the results.
+
+---
+
+## 📊 Key Features
+- Fully modular architecture.
+- Supports nonlinear hyperelastic material models.
+- Structured and unstructured mesh capability.
+- Sparse matrix assembly and efficient solving.
+- Easy extension for new element types and materials.
+
+---
+
+
+
+
