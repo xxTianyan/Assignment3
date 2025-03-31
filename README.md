@@ -74,10 +74,6 @@ This repository implements a modular 2D Finite Element Analysis (FEA) solver fro
   - Plot deformed meshes.
   - Visualize displacement and stress fields.
 
-### 7. Examples and Validation (`example_functions.py`)
-- Provides reference solutions and load cases.
-- Useful for unit testing and convergence checks.
-
 ---
 
 ## 📖 Tutorial Example: `full_code_example_1.py`
