@@ -26,3 +26,5 @@ venv/
 # IDE configuration files
 .vscode/
 .idea/
+
+.DS_Store
