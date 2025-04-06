@@ -1,40 +1,28 @@
-# ====================
-# Python
-# ====================
+# -------------------------------
+# Python temporary files and build artifacts
+# -------------------------------
+
+# Build directories
+build/
+dist/
+*.egg-info/
+.eggs/
+.coverage
+
+# Compiled files
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
-*.so
+*$py.class
+
+# Executable installation packages
 *.egg
-*.egg-info/
-dist/
-build/
-.eggs/
- .pytest_cache/
+*.whl
 
-# ====================
-# Virtual Environment
-# ====================
-.env/
+# Local development environments
 .venv/
-venv/
-ENV/
 env/
-*.env
+venv/
 
-# ====================
-# Jupyter Notebooks
-# ====================
-.ipynb_checkpoints/
-*.nbconvert.ipynb
-
-# ====================
-# VSCode / IDE
-# ====================
-.v
-
-# ====================
-# apple
-# ====================
-.DS_Store
+# IDE configuration files
+.vscode/
+.idea/
