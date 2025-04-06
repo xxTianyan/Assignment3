@@ -1,0 +1,40 @@
+# ====================
+# Python
+# ====================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+ .pytest_cache/
+
+# ====================
+# Virtual Environment
+# ====================
+.env/
+.venv/
+venv/
+ENV/
+env/
+*.env
+
+# ====================
+# Jupyter Notebooks
+# ====================
+.ipynb_checkpoints/
+*.nbconvert.ipynb
+
+# ====================
+# VSCode / IDE
+# ====================
+.v
+
+# ====================
+# apple
+# ====================
+.DS_Store

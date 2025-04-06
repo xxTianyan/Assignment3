@@ -615,6 +615,44 @@ def identify_rect_boundaries(
 
     return boundary_nodes, boundary_edges
 
+def identify_rect_boundaries_with_corners(
+    coords: np.ndarray,
+    connect: np.ndarray,
+    ele_type: str,
+    x_lower: float,
+    x_upper: float,
+    y_lower: float,
+    y_upper: float,
+    tol: float = 1e-10
+):
+    """
+    Wraps identify_rect_boundaries and additionally returns corner node indices.
+
+    Returns
+    -------
+    boundary_nodes : dict of {str -> set of int}
+    boundary_edges : dict of {str -> list of (elem_id, face_id)}
+    corner_node_ids : dict with keys 'lower_left', 'upper_right'
+    """
+    boundary_nodes, boundary_edges = identify_rect_boundaries(
+        coords, connect, ele_type, x_lower, x_upper, y_lower, y_upper, tol
+    )
+
+    lower_left_node = set()
+    upper_right_node = set()
+
+    for nid, (xval, yval) in enumerate(coords):
+        if abs(xval - x_lower) < tol and abs(yval - y_lower) < tol:
+            lower_left_node.add(nid)
+        if abs(xval - x_upper) < tol and abs(yval - y_upper) < tol:
+            upper_right_node.add(nid)
+
+    corner_node_ids = {
+        'lower_left': set(lower_left_node),
+        'upper_right': set(upper_right_node)
+    }
+
+    return corner_node_ids
 
 def local_faces_for_element_type(ele_type: str):
     """
