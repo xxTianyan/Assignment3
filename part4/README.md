@@ -5,4 +5,4 @@
   Uses `full_example_2` to illustrate $h$- and $p$-refinement.
 
 - `failed_example.ipynb`  
-  Shows how a low-quality mesh can lead to an ill-conditioned stiffness matrix.
+  Shows how a low-quality mesh can lead to an ill-conditioned stiffness matrix. And then the fea result has a large deviation with respect to analytical result.
