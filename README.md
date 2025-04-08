@@ -109,6 +109,16 @@ This file walks through solving a 2D **hyperelastic uniaxial extension** problem
 
 ---
 
+## 📈 Flow Chart
+
+<img src="flow_chart.png" alt="Mesh plot2" style="width:100%;">
+
+
+
+
+
+
+
 
 
 
