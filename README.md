@@ -10,8 +10,6 @@
 
 ### Conda environment, install, and testing
 
-Note: this is an extremely minimalist readme, but the code is highly documented and will get built out over the coures of assignment 3.
-
 ```bash
 conda create --name finite-element-analysis-env python=3.12.9
 ```
@@ -76,36 +74,12 @@ This repository implements a modular 2D Finite Element Analysis (FEA) solver fro
 
 ---
 
-## 📖 Tutorial Example: `full_code_example_1.py`
+## 📖 Tutorial Example: 
+  - `full_code_example_1.py` linear elastic beam
+  - `full_code_example_1.py1` hyperelastic large deformation problem
+  - `pure_shear.py` a puer sharing testing
 
-This file walks through solving a 2D **hyperelastic uniaxial extension** problem using the framework.
 
-### Problem Setup
-- **Domain**: Rectangle with length `L` and height `H`.
-- **Boundary Conditions**:
-  - Left (x=0): Fixed (u_x = u_y = 0)
-  - Right (x=L): u_x = (lambda - 1)*L, u_y = 0
-  - Top/Bottom: u_y = 0 to enforce homogeneous deformation.
-- **Analytical Displacement Field**:
-  - u_x(x) = (lambda - 1) * x
-  - u_y(x) = 0
-
-### Code Flow
-1. **Import modules** from the FEA framework.
-2. **Generate mesh** with `generate_rect_mesh`.
-3. **Define material model** for hyperelasticity.
-4. **Set boundary conditions**.
-5. **Call `hyperelastic_solver(...)`** to compute displacements.
-6. **Use `visualize.plot_deformed_mesh(...)`** to visualize the results.
-
----
-
-## 📊 Key Features
-- Fully modular architecture.
-- Supports nonlinear hyperelastic material models.
-- Structured and unstructured mesh capability.
-- Sparse matrix assembly and efficient solving.
-- Easy extension for new element types and materials.
 
 ---
 
